@@ -2,14 +2,11 @@ import axios from "axios";
 import flatCache from "flat-cache";
 import readline from "readline-sync";
 
-var myLat = "";
-var myLng = "";
-var radius = "";
-var token = "";
-var userKey = "";
+var [myLat, myLng, radius, token, userKey] = Array(6).fill("");
 
 const cache = flatCache.load("rat");
 const defaults = cache.getKey("defaults");
+purgeExpiredCache();
 
 if (defaults) {
   var { myLat, myLng, radius, token, userKey } = defaults;
@@ -39,7 +36,7 @@ if (!defaults) {
   const persist = readline.question("Save these as defaults (write true)? ");
   if (persist === "true") {
     cache.setKey("defaults", { myLat, myLng, radius, token, userKey });
-    cache.save();
+    cache.save(true);
   }
 }
 
@@ -68,7 +65,7 @@ async function getRats() {
   return axios
     .get("https://sparkling-voice-bdd0.pipelabs-au.workers.dev/")
     .then((res) => {
-      const myStores = res.data.filter((store) => {
+      const rats = res.data.filter((store) => {
         if (
           distance(store.lat, store.lng, myLat, myLng) <= radius &&
           ["IN_STOCK", "LOW_STOCK"].includes(store.status)
@@ -77,7 +74,7 @@ async function getRats() {
         }
         return false;
       });
-      return myStores;
+      return getNewRats(rats);
     })
     .catch(function (error) {
       console.log("Error finding a rat, will try again in 5mins");
@@ -99,20 +96,53 @@ async function postMessage(results) {
       message: storeNames,
     })
     .then((res) => {
-      console.log(`Found ${results.length} Rats`);
       console.log(storeNames);
       console.log("Posted Notification to hunters");
     });
 }
 
+function purgeExpiredCache() {
+  var cachedRats = cache.getKey("rats") || [];
+  const targetTime = new Date().getTime() - 12 * 60 * 60 * 1000;
+  const newCache = cachedRats.filter((rat) => {
+    return rat.discovered_time > targetTime;
+  });
+  cache.setKey("rats", newCache);
+  cache.save(true);
+}
+
+function updateCache(rats) {
+  var cachedRats = cache.getKey("rats") || [];
+  rats.forEach((rat) => {
+    rat.discovered_time = new Date().getTime();
+  });
+  cachedRats = cachedRats.concat(rats);
+  cache.setKey("rats", cachedRats);
+  cache.save(true);
+}
+
+function getNewRats(rats) {
+  var cachedRats = cache.getKey("rats") || [];
+  const cachedRatsIds = cachedRats.map((rat) => {
+    return rat.id;
+  });
+  const newRats = rats.filter((cachedRat) => {
+    return !cachedRatsIds.includes(cachedRat.id);
+  });
+  return newRats;
+}
+
 function hunt() {
-  getRats().then((results) => {
-    if (results && results.length === 0) {
+  getRats().then((newRats) => {
+    if (newRats && newRats.length === 0) {
       console.log("Found no rats this round.");
       return;
     }
 
-    postMessage(results);
+    console.log(`Found ${newRats.length} Rats`);
+
+    postMessage(newRats);
+    updateCache(newRats);
   });
 }
 
