@@ -35,4 +35,4 @@ Huge credits go to findarat.com.au - this has been a huge community saver, and i
 
 # Roadmap
 
-- [x] Only notify of RATs that have no been previously marked in the past 12 hours (let's be honest, they sell out in the past 20mins).
+- [x] Only notify of RATs that have no been previously marked in the past 4 hours (let's be honest, they sell out in the past 20mins).

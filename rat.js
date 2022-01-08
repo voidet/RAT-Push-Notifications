@@ -103,7 +103,7 @@ async function postMessage(results) {
 
 function purgeExpiredCache() {
   var cachedRats = cache.getKey("rats") || [];
-  const targetTime = new Date().getTime() - 12 * 60 * 60 * 1000;
+  const targetTime = new Date().getTime() - 4 * 60 * 60 * 1000;
   const newCache = cachedRats.filter((rat) => {
     return rat.discovered_time > targetTime;
   });
