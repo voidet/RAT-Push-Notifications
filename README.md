@@ -24,3 +24,9 @@ Above are example installation steps. This will fire off a bunch of questions, a
 * desired radius
 * Pushover.com token
 * Pushover.com user key
+
+# Credits
+Huge credits go to findarat.com.au - this has been a huge community saver, and if this adds too much to your traffic, I would be happy to set up a cache mirror on my end to move traffic away from you.
+
+# Roadmap
+* Only notify of RATs that have no been previously marked in the past 12 hours (let's be honest, they sell out in the past 20mins).
