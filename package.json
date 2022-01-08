@@ -1,0 +1,8 @@
+{
+  "type": "module",
+  "dependencies": {
+    "axios": "^0.24.0",
+    "flat-cache": "^3.0.4",
+    "readline-sync": "^1.4.10"
+  }
+}
