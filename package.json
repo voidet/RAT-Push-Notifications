@@ -1,8 +1,12 @@
 {
   "type": "module",
+  "scripts": {
+    "start": "./node_modules/nodemon/bin/nodemon.js ./rat.js"
+  },
   "dependencies": {
     "axios": "^0.24.0",
     "flat-cache": "^3.0.4",
+    "nodemon": "^2.0.15",
     "readline-sync": "^1.4.10"
   }
 }

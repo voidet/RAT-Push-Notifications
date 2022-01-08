@@ -9,6 +9,11 @@ var token = "";
 var userKey = "";
 
 const cache = flatCache.load("rat");
+const defaults = cache.getKey("defaults");
+
+if (defaults) {
+  var { myLat, myLng, radius, token, userKey } = defaults;
+}
 
 if (myLat === "") {
   myLat = readline.question("What your lat? ");
@@ -28,6 +33,14 @@ if (token === "") {
 
 if (userKey === "") {
   userKey = readline.question("What your pushover user key? ");
+}
+
+if (!defaults) {
+  const persist = readline.question("Save these as defaults (write true)? ");
+  if (persist === "true") {
+    cache.setKey("defaults", { myLat, myLng, radius, token, userKey });
+    cache.save();
+  }
 }
 
 // https://stackoverflow.com/questions/27928/calculate-distance-between-two-latitude-longitude-points-haversine-formula
