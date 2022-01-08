@@ -7,3 +7,20 @@ This is a script that will run on your computer / server that will check the fin
 # What do I need?
 You will need your lat / lng of homebase for you I used https://www.latlong.net/convert-address-to-lat-long.html
 Next you will need to sign up for a Pushover account. This is an app you can get from the app stores that you install on your phone, then set up some quick development keys on the web, and you will receive push notifications through this app. This saves the hassle of setting up an app through the Apple and Google app stores awaiting for reviews and rejections when essentially this is just a push notification receiver. From there, the script will check every 5mins findarat.com.au and send push notifications for RATs available (in stock or low stock) in your area.
+
+# Installation
+
+```
+cd ~/Desktop
+git clone git@github.com:voidet/RAT-Push-Notifications.git
+npm i
+node rat.js
+```
+
+Above are example installation steps. This will fire off a bunch of questions, asking for your:
+
+* lat
+* lng
+* desired radius
+* Pushover.com token
+* Pushover.com user key
