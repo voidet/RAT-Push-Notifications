@@ -26,8 +26,8 @@ Above are example installation steps. This will fire off a bunch of questions, a
 - lat
 - lng
 - desired radius
-- Pushover.com token
-- Pushover.com user key
+- Pushover.net token
+- Pushover.net user key
 
 # Credits
 
